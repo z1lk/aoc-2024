@@ -19,27 +19,21 @@ pub fn part_1(input: &str) -> i32 {
     ids1.sort();
     ids2.sort();
 
-    let mut diffs: Vec<i32> = Vec::new();
-
-    for (i, id1) in ids1.iter().enumerate() {
-        let diff = (id1 - ids2[i]).abs();
-        diffs.push(diff);
-    }
-
-    diffs.into_iter().sum()
+    ids1.iter()
+        .zip(ids2.iter())
+        .map(|(a, b)| (a - b).abs())
+        .sum()
 }
 
 pub fn part_2(input: &str) -> i32 {
     let (ids1, ids2) = read(input);
     
-    let mut sim: i32 = 0;
-
-    for id in ids1 {
-        let count = ids2.iter().filter(|&x| *x == id).count();
-        sim += id * (count as i32);
-    }
-
-    sim
+    ids1.iter()
+        .map(|id| {
+            let count = ids2.iter().filter(|&x| *x == *id).count() as i32;
+            id * count
+        })
+        .sum()
 }
 
 #[cfg(test)]

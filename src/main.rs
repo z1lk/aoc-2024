@@ -3,8 +3,9 @@
 
 mod helpers;
 mod day_01;
+mod day_02;
 
 fn main() {
-    println!("{}", day_01::part_1("01"));
-    println!("{}", day_01::part_2("01"));
+    //println!("{}", day_02::part_1("02"));
+    println!("{}", day_02::part_2("02"));
 }
