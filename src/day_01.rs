@@ -1,5 +1,5 @@
 fn read(input: &str) -> (Vec<i32>, Vec<i32>) {
-    let lines = crate::helpers::read_input(input);
+    let lines = crate::helpers::read_input_lines(input);
 
     let mut ids1: Vec<i32> = Vec::new();
     let mut ids2: Vec<i32> = Vec::new();
@@ -46,13 +46,13 @@ mod tests {
     }
 
     #[test]
-    fn sample_2() {
-        assert_eq!(part_2("01_sample"), 31);
+    fn answer_1() {
+        assert_eq!(part_1("01"), 1580061);
     }
 
     #[test]
-    fn answer_1() {
-        assert_eq!(part_1("01"), 1580061);
+    fn sample_2() {
+        assert_eq!(part_2("01_sample"), 31);
     }
 
     #[test]

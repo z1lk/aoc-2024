@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 fn read(input: &str) -> Vec<Vec<i32>> {
-    let lines = crate::helpers::read_input(input);
+    let lines = crate::helpers::read_input_lines(input);
     lines.iter().map(|l| {
         l.split(" ").map(|n| n.parse::<i32>().unwrap_or(0)).collect()
     }).collect()
@@ -59,13 +59,13 @@ mod tests {
     }
 
     #[test]
-    fn sample_2() {
-        assert_eq!(part_2("02_sample"), 4);
+    fn answer_1() {
+        assert_eq!(part_1("02"), 463);
     }
 
     #[test]
-    fn answer_1() {
-        assert_eq!(part_1("02"), 463);
+    fn sample_2() {
+        assert_eq!(part_2("02_sample"), 4);
     }
 
     #[test]

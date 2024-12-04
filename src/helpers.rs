@@ -1,5 +1,9 @@
 use std::fs::read_to_string;
 
+pub fn read_input(name: &str) -> String {
+    read_to_string(&("src/inputs/".to_owned() + name)).unwrap()
+}
+
 // https://doc.rust-lang.org/stable/rust-by-example/std_misc/file/read_lines.html
 pub fn read_lines(filename: &str) -> Vec<String> {
     read_to_string(filename)
@@ -9,6 +13,6 @@ pub fn read_lines(filename: &str) -> Vec<String> {
         .collect()  // gather them together into a vector
 }
 
-pub fn read_input(name: &str) -> Vec<String> {
+pub fn read_input_lines(name: &str) -> Vec<String> {
     read_lines(&("src/inputs/".to_owned() + name))
 }
