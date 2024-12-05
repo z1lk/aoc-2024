@@ -1,5 +1,69 @@
-// use itertools::Itertools;
-use regex::Regex;
+mod grid {
+    struct Grid {
+        rows: Vec<Vec<char>>,
+        width: i32,
+        height: i32
+    }
+
+    impl Grid {
+        fn new(rows: Vec<Vec<char>>) -> Self {
+            Self {
+                width: rows.iter().map(|r| r.len()).max().unwrap_or(0) as i32,
+                height: rows.len() as i32,
+                rows,
+            }
+        }
+
+        fn iter(&self) -> GridIter {
+            GridIter::new(&self)
+        }
+
+        fn get(&self, x: i32, y: i32) -> char {
+            // if out of bounds, return '!' which won't match
+            if x < 0 { return '!'; }
+            if y < 0 { return '!'; }
+            if x >= self.width { return '!'; }
+            if y >= self.height { return '!'; }
+
+            self.rows[y as usize][x as usize]
+        }
+    }
+
+    struct GridIter<'a> {
+        grid: &'a Grid,
+        x: i32,
+        y: i32,
+    }
+
+    impl GridIter<'_> {
+        fn new(grid: &Grid) -> Self {
+            Self {
+                grid,
+                x: 0,
+                y: 0
+            }
+        }
+    }
+
+    impl Iterator for GridIter<'_> {
+        type Item = (char, i32, i32);
+
+        fn next(&mut self) -> Option<Self::Item> {
+            let x = self.x + 1;
+            let y = self.y;
+            if x >= self.grid.width {
+                let x = 0;
+                let y = y + 1;
+            }
+            if y >= self.grid.height {
+                return None;
+            }
+            self.x = x;
+            self.y = y;
+            Some( (self.grid.get(x, y), x, y) )
+        }
+    }
+}
 
 fn read(input: &str) -> Vec<Vec<char>> {
     let lines = crate::helpers::read_input_to_lines(input);

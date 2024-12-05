@@ -8,7 +8,7 @@ mod day_03;
 mod day_04;
 
 fn main() {
-    //println!("{}", day_04::part_1("04_sample"));
+    println!("{}", day_04::part_1("04_sample"));
     //println!("{}", day_04::part_1("04"));
     //println!("{}", day_04::part_2("04_sample"));
     //println!("{}", day_04::part_2("04"));
