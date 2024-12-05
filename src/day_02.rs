@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 fn read(input: &str) -> Vec<Vec<i32>> {
-    let lines = crate::helpers::read_input_lines(input);
+    let lines = crate::helpers::read_input_to_lines(input);
     lines.iter().map(|l| {
         l.split(" ").map(|n| n.parse::<i32>().unwrap_or(0)).collect()
     }).collect()

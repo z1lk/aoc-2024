@@ -1,5 +1,5 @@
 fn read(input: &str) -> (Vec<i32>, Vec<i32>) {
-    let lines = crate::helpers::read_input_lines(input);
+    let lines = crate::helpers::read_input_to_lines(input);
 
     let mut ids1: Vec<i32> = Vec::new();
     let mut ids2: Vec<i32> = Vec::new();

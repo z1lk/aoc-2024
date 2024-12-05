@@ -2,7 +2,7 @@
 use regex::Regex;
 
 fn read(input: &str) -> String {
-    crate::helpers::read_input(input)
+    crate::helpers::read_input_to_string(input)
 }
 
 pub fn part_1(input: &str) -> i32 {
