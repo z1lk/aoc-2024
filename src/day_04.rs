@@ -1,6 +1,3 @@
-// use itertools::Itertools;
-use regex::Regex;
-
 fn read(input: &str) -> Vec<Vec<char>> {
     let lines = crate::helpers::read_input_to_lines(input);
     lines.iter().map(|line| line.chars().collect()).collect()
