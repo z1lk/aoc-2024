@@ -11,8 +11,8 @@ mod day_05;
 mod day_06;
 
 fn main() {
-    println!("{}", day_05::part_1("06_sample"));
-    //println!("{}", day_05::part_1("05"));
-    //println!("{}", day_05::part_2("05_sample"));
-    //println!("{}", day_05::part_2("05"));
+    //println!("{}", day_06::part_1("06_sample"));
+    //println!("{}", day_06::part_1("06"));
+    //println!("{}", day_06::part_2("06_sample"));
+    //println!("{}", day_06::part_2("06"));
 }

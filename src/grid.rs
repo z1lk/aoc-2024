@@ -14,22 +14,50 @@ impl Grid {
         }
     }
 
+    pub fn from_lines(lines: Vec<String>) -> Self {
+        let rows: Vec<Vec<char>> = lines.iter().map(|line| line.chars().collect()).collect();
+        Self::new(rows)
+    }
+
     pub fn iter(&self) -> GridIter {
         GridIter::new(&self)
     }
 
-    pub fn get(&self, x: i32, y: i32) -> Option<char> {
-        // if out of bounds, return '!' which won't match
-        //if x < 0 { return '!'; }
-        //if y < 0 { return '!'; }
-        //if x >= self.width { return '!'; }
-        //if y >= self.height { return '!'; }
+    pub fn find(&self, d: char) -> Option<(i32, i32)> {
+        for (oc, x, y) in self.iter() {
+            if let Some(c) = oc {
+                if c == d { return Some((x, y)); }
+            }
+        }
+        return None;
+    }
 
+    pub fn count(&self, d: char) -> i32 {
+        let mut count = 0;
+        for (oc, x, y) in self.iter() {
+            if let Some(c) = oc {
+                if c == d { count += 1 }
+            }
+        }
+        count
+    }
+
+    pub fn get(&self, x: i32, y: i32) -> Option<char> {
         match self.rows.get(y as usize) {
             Some(row) => row.get(x as usize).copied(),
             None => None
         }
-        //self.rows[y as usize][x as usize]
+    }
+
+    // NOTE: started to allow setting outside bounds,
+    // but vecs don't appear to have negative indices,
+    // so we'll have to shift everything up in that case
+    pub fn set(&mut self, c: char, x: i32, y: i32) -> () {
+        //self.rows.resize((y + 1) as usize, Vec::<char>::new());
+        //let row: &mut Vec<char> = self.rows.get_mut(y as usize).unwrap();
+        //row.resize((x + 1) as usize, '.');
+        //row[x as usize] = c;
+        self.rows[y as usize][x as usize] = c;
     }
 
     pub fn neighbors(&self, x: i32, y: i32) -> Vec<(Option<char>, i32, i32)> {
@@ -44,6 +72,16 @@ impl Grid {
             }
         }
         arr
+    }
+
+    pub fn draw(&self) {
+        std::process::Command::new("clear").status().unwrap();
+        for row in &self.rows {
+            for c in row {
+                print!("{}", c);
+            }
+            print!("\n");
+        }
     }
 }
 

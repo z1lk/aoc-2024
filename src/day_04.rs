@@ -1,13 +1,11 @@
 use crate::grid::Grid;
 
-fn read(input: &str) -> Vec<Vec<char>> {
-    let lines = crate::helpers::read_input_to_lines(input);
-    lines.iter().map(|line| line.chars().collect()).collect()
+fn read(input: &str) -> Grid {
+    Grid::from_lines(crate::helpers::read_input_to_lines(input))
 }
 
 pub fn part_1(input: &str) -> i32 {
-    let rows: Vec<Vec<char>> = read(input);
-    let grid = Grid::new(rows);
+    let grid: Grid = read(input);
 
     let mut xmas = 0;
 
@@ -25,8 +23,7 @@ pub fn part_1(input: &str) -> i32 {
 }
 
 pub fn part_2(input: &str) -> i32 {
-    let rows: Vec<Vec<char>> = read(input);
-    let grid = Grid::new(rows);
+    let grid: Grid = read(input);
 
     let mut x_mas = 0;
 
