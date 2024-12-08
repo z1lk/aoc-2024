@@ -2,21 +2,46 @@
 pub struct Grid {
     rows: Vec<Vec<char>>,
     width: i32,
-    height: i32
+    height: i32,
+    default: char
 }
 
 impl Grid {
-    pub fn new(rows: Vec<Vec<char>>) -> Self {
-        Self {
-            width: rows.iter().map(|r| r.len()).max().unwrap_or(0) as i32,
-            height: rows.len() as i32,
-            rows,
-        }
-    }
+    pub fn get_width(&self) -> i32 { self.width }
+    pub fn get_height(&self) -> i32 { self.height }
 
     pub fn from_lines(lines: Vec<String>) -> Self {
         let rows: Vec<Vec<char>> = lines.iter().map(|line| line.chars().collect()).collect();
-        Self::new(rows)
+        Self::from_rows(rows)
+    }
+
+    pub fn from_rows(rows: Vec<Vec<char>>) -> Self {
+        let mut g = Self {
+            width: 0,
+            height: 0,
+            rows,
+            default: '.'
+        };
+        g.update_dims();
+        g
+    }
+
+    pub fn fresh(default: char, width: i32, height: i32) -> Self {
+        let mut g = Self {
+            width,
+            height,
+            rows: Vec::new(),
+            default,
+        };
+        for (_, x, y) in g.iter() {
+            g.set(default, x, y);
+        }
+        g
+    }
+
+    fn update_dims(&mut self) {
+        self.width = self.rows.iter().map(|r| r.len()).max().unwrap_or(0) as i32;
+        self.height = self.rows.len() as i32;
     }
 
     pub fn iter(&self) -> GridIter {
@@ -49,14 +74,21 @@ impl Grid {
         }
     }
 
-    // NOTE: started to allow setting outside bounds,
+    // NOTE: started to allow setting negatives,
     // but vecs don't appear to have negative indices,
-    // so we'll have to shift everything up in that case
+    // so we'll have to shift everything up in that case.
+    // Could track origin and then offset all returned x/y,
+    // e.g. if origin is (-2,-2) then the rows[1][1] is (-1,-1), origin + (x,y)
     pub fn set(&mut self, c: char, x: i32, y: i32) -> () {
-        //self.rows.resize((y + 1) as usize, Vec::<char>::new());
-        //let row: &mut Vec<char> = self.rows.get_mut(y as usize).unwrap();
-        //row.resize((x + 1) as usize, '.');
-        //row[x as usize] = c;
+        let y_len = (y + 1) as usize;
+        let x_len = (x + 1) as usize;
+        while self.rows.len() < y_len {
+            self.rows.push(Vec::<char>::new());
+        }
+        // TODO: fix other rows to match?
+        while self.rows[y as usize].len() < x_len {
+            self.rows[y as usize].push(self.default);
+        }
         self.rows[y as usize][x as usize] = c;
     }
 
@@ -96,7 +128,7 @@ impl GridIter {
         Self {
             // not cloning here introduces a compiler error, something to do with lifetimes
             grid: grid.clone(),
-            x: 0,
+            x: -1, // first next() will inc x to 0
             y: 0
         }
     }

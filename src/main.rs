@@ -10,10 +10,11 @@ mod day_04;
 mod day_05;
 mod day_06;
 mod day_07;
+mod day_08;
 
 fn main() {
-    //println!("{}", day_07::part_1("07_sample"));
-    //println!("{}", day_07::part_1("07"));
-    //println!("{}", day_07::part_2("07_sample"));
-    //println!("{}", day_07::part_2("07"));
+    //println!("{}", day_08::part_1("08_sample"));
+    //println!("{}", day_08::part_1("08"));
+    //println!("{}", day_08::part_2("08_sample"));
+    //println!("{}", day_08::part_2("08"));
 }
