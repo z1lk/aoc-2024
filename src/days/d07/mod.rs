@@ -1,5 +1,10 @@
-fn read(input: &str) -> Vec<(i64, Vec<i64>)> {
-    crate::helpers::read_input_to_lines(input)
+pub mod inputs {
+    pub const REAL: &str = include_str!("real");
+    pub const SAMPLE: &str = include_str!("sample");
+}
+
+fn parse(input: &str) -> Vec<(i64, Vec<i64>)> {
+    crate::helpers::to_lines(input)
         .iter()
         .map(|l| {
             let split: Vec<&str> = l.split(": ").collect();
@@ -14,7 +19,7 @@ fn read(input: &str) -> Vec<(i64, Vec<i64>)> {
 }
 
 pub fn part_1(input: &str) -> i64 {
-    let eqs = read(input);
+    let eqs = parse(input);
     let mut cal_res = 0;
     for eq in eqs {
         if can_eval_true(eq.clone(), false) { cal_res += eq.0 }
@@ -23,7 +28,7 @@ pub fn part_1(input: &str) -> i64 {
 }
 
 pub fn part_2(input: &str) -> i64 {
-    let eqs = read(input);
+    let eqs = parse(input);
     let mut cal_res = 0;
     for eq in eqs {
         if can_eval_true(eq.clone(), true) { cal_res += eq.0 }
@@ -73,23 +78,23 @@ mod tests {
     use super::*;
 
     #[test]
-    fn sample_1() {
-        assert_eq!(part_1("07_sample"), 3749);
+    fn part_1_sample() {
+        assert_eq!(part_1(inputs::SAMPLE), 3749);
     }
 
     #[test]
-    fn answer_1() {
-        assert_eq!(part_1("07"), 5030892084481);
+    fn part_1_real() {
+        assert_eq!(part_1(inputs::REAL), 5030892084481);
     }
 
     #[test]
-    fn sample_2() {
-        assert_eq!(part_2("07_sample"), 11387);
+    fn part_2_sample() {
+        assert_eq!(part_2(inputs::SAMPLE), 11387);
     }
 
     #[test]
-    fn answer_2() {
+    fn part_2_real() {
         // takes 5-10 secs
-        //assert_eq!(part_2("07"), 91377448644679);
+        //assert_eq!(part_2(inputs::REAL), 91377448644679);
     }
 }

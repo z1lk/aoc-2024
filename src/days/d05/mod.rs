@@ -1,5 +1,10 @@
-fn read(input: &str) -> (Vec<(i32, i32)>, Vec<Vec<i32>>) {
-    let lines = crate::helpers::read_input_to_lines(input);
+pub mod inputs {
+    pub const REAL: &str = include_str!("real");
+    pub const SAMPLE: &str = include_str!("sample");
+}
+
+fn parse(input: &str) -> (Vec<(i32, i32)>, Vec<Vec<i32>>) {
+    let lines = crate::helpers::to_lines(input);
     let mut rules: Vec<(i32, i32)> = Vec::new();
     let mut updates: Vec<Vec<i32>> = Vec::new();
 
@@ -18,7 +23,7 @@ fn read(input: &str) -> (Vec<(i32, i32)>, Vec<Vec<i32>>) {
 }
 
 pub fn part_1(input: &str) -> i32 {
-    let (rules, updates) = read(input);
+    let (rules, updates) = parse(input);
     let mut sum = 0;
     for update in updates {
         if is_good(&rules, &update) {
@@ -29,7 +34,7 @@ pub fn part_1(input: &str) -> i32 {
 }
 
 pub fn part_2(input: &str) -> i32 {
-    let (rules, updates) = read(input);
+    let (rules, updates) = parse(input);
 
     let mut sum = 0;
     for update in updates {
@@ -77,22 +82,22 @@ mod tests {
     use super::*;
 
     #[test]
-    fn sample_1() {
-        assert_eq!(part_1("05_sample"), 143);
+    fn part_1_sample() {
+        assert_eq!(part_1(inputs::SAMPLE), 143);
     }
 
     #[test]
-    fn answer_1() {
-        assert_eq!(part_1("05"), 5762);
+    fn part_1_real() {
+        assert_eq!(part_1(inputs::REAL), 5762);
     }
 
     #[test]
-    fn sample_2() {
-        assert_eq!(part_2("05_sample"), 123);
+    fn part_2_sample() {
+        assert_eq!(part_2(inputs::SAMPLE), 123);
     }
 
     #[test]
-    fn answer_2() {
-        assert_eq!(part_2("05"), 4130);
+    fn part_2_real() {
+        assert_eq!(part_2(inputs::REAL), 4130);
     }
 }

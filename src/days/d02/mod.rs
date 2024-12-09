@@ -1,14 +1,19 @@
 use itertools::Itertools;
 
-fn read(input: &str) -> Vec<Vec<i32>> {
-    let lines = crate::helpers::read_input_to_lines(input);
+pub mod inputs {
+    pub const REAL: &str = include_str!("real");
+    pub const SAMPLE: &str = include_str!("sample");
+}
+
+fn parse(input: &str) -> Vec<Vec<i32>> {
+    let lines = crate::helpers::to_lines(input);
     lines.iter().map(|l| {
         l.split(" ").map(|n| n.parse::<i32>().unwrap_or(0)).collect()
     }).collect()
 }
 
 pub fn part_1(input: &str) -> i32 {
-    let reports = read(input);
+    let reports = parse(input);
     let mut safe = 0;
     for report in reports {
         if report_safe(&report) { safe += 1 }
@@ -17,7 +22,7 @@ pub fn part_1(input: &str) -> i32 {
 }
 
 pub fn part_2(input: &str) -> i32 {
-    let reports = read(input);
+    let reports = parse(input);
     let mut safe = 0;
     for report in reports {
         if report_safe(&report) {
@@ -54,22 +59,22 @@ mod tests {
     use super::*;
 
     #[test]
-    fn sample_1() {
-        assert_eq!(part_1("02_sample"), 2);
+    fn part_1_sample() {
+        assert_eq!(part_1(inputs::SAMPLE), 2);
     }
 
     #[test]
-    fn answer_1() {
-        assert_eq!(part_1("02"), 463);
+    fn part_1_real() {
+        assert_eq!(part_1(inputs::REAL), 463);
     }
 
     #[test]
-    fn sample_2() {
-        assert_eq!(part_2("02_sample"), 4);
+    fn part_2_sample() {
+        assert_eq!(part_2(inputs::SAMPLE), 4);
     }
 
     #[test]
-    fn answer_2() {
-        assert_eq!(part_2("02"), 514);
+    fn part_2_real() {
+        assert_eq!(part_2(inputs::REAL), 514);
     }
 }

@@ -1,11 +1,16 @@
 use crate::grid::Grid;
 
-fn read(input: &str) -> Grid {
-    Grid::from_lines(crate::helpers::read_input_to_lines(input))
+pub mod inputs {
+    pub const REAL: &str = include_str!("real");
+    pub const SAMPLE: &str = include_str!("sample");
+}
+
+fn parse(input: &str) -> Grid {
+    Grid::from_lines(crate::helpers::to_lines(input))
 }
 
 pub fn part_1(input: &str) -> i32 {
-    let grid = read(input);
+    let grid = parse(input);
     let mut antinodes = Grid::fresh('.', grid.get_width(), grid.get_height());
     for (c, x, y) in grid.iter() {
         if (c == Some('.')) { continue }
@@ -25,7 +30,7 @@ pub fn part_1(input: &str) -> i32 {
 }
 
 pub fn part_2(input: &str) -> i32 {
-    let grid = read(input);
+    let grid = parse(input);
     let mut antinodes = Grid::fresh('.', grid.get_width(), grid.get_height());
     for (c, x, y) in grid.iter() {
         if (c == Some('.')) { continue }
@@ -53,22 +58,22 @@ mod tests {
     use super::*;
 
     #[test]
-    fn sample_1() {
-        assert_eq!(part_1("08_sample"), 14);
+    fn part_1_sample() {
+        assert_eq!(part_1(inputs::SAMPLE), 14);
     }
 
     #[test]
-    fn answer_1() {
-        assert_eq!(part_1("08"), 240);
+    fn part_1_real() {
+        assert_eq!(part_1(inputs::REAL), 240);
     }
 
     #[test]
-    fn sample_2() {
-        assert_eq!(part_2("08_sample"), 34);
+    fn part_2_sample() {
+        assert_eq!(part_2(inputs::SAMPLE), 34);
     }
 
     #[test]
-    fn answer_2() {
-        assert_eq!(part_2("08"), 955);
+    fn part_2_real() {
+        assert_eq!(part_2(inputs::REAL), 955);
     }
 }

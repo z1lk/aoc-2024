@@ -1,10 +1,15 @@
-fn read(input: &str) -> (Vec<i32>, Vec<i32>) {
-    let lines = crate::helpers::read_input_to_lines(input);
+pub mod inputs {
+    pub const REAL: &str = include_str!("real");
+    pub const SAMPLE: &str = include_str!("sample");
+}
 
+fn parse(input: &str) -> (Vec<i32>, Vec<i32>) {
+    let lines = crate::helpers::to_lines(input);
     let mut ids1: Vec<i32> = Vec::new();
     let mut ids2: Vec<i32> = Vec::new();
 
     for line in lines {
+        println!("{}", line);
         let items: Vec<&str> = line.split("   ").collect();
         ids1.push(items[0].parse::<i32>().unwrap_or(0));
         ids2.push(items[1].parse::<i32>().unwrap_or(0));
@@ -14,7 +19,7 @@ fn read(input: &str) -> (Vec<i32>, Vec<i32>) {
 }
 
 pub fn part_1(input: &str) -> i32 {
-    let (mut ids1, mut ids2) = read(input);
+    let (mut ids1, mut ids2) = parse(input);
 
     ids1.sort();
     ids2.sort();
@@ -26,7 +31,7 @@ pub fn part_1(input: &str) -> i32 {
 }
 
 pub fn part_2(input: &str) -> i32 {
-    let (ids1, ids2) = read(input);
+    let (ids1, ids2) = parse(input);
     
     ids1.iter()
         .map(|id| {
@@ -41,22 +46,22 @@ mod tests {
     use super::*;
 
     #[test]
-    fn sample_1() {
-        assert_eq!(part_1("01_sample"), 11);
+    fn part_1_sample() {
+        assert_eq!(part_1(inputs::SAMPLE), 11);
     }
 
     #[test]
-    fn answer_1() {
-        assert_eq!(part_1("01"), 1580061);
+    fn part_1_real() {
+        assert_eq!(part_1(inputs::REAL), 1580061);
     }
 
     #[test]
-    fn sample_2() {
-        assert_eq!(part_2("01_sample"), 31);
+    fn part_2_sample() {
+        assert_eq!(part_2(inputs::SAMPLE), 31);
     }
 
     #[test]
-    fn answer_2() {
-        assert_eq!(part_2("01"), 23046913);
+    fn part_2_real() {
+        assert_eq!(part_2(inputs::REAL), 23046913);
     }
 }

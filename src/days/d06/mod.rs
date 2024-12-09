@@ -2,17 +2,22 @@ use std::{thread, time};
 
 use crate::grid::Grid;
 
+pub mod inputs {
+    pub const REAL: &str = include_str!("real");
+    pub const SAMPLE: &str = include_str!("sample");
+}
+
 #[derive(Copy,Clone,Debug,PartialEq)]
 pub enum Dir { U, D, L, R }
 
 pub enum Result { Exit, Loop }
 
-fn read(input: &str) -> Grid {
-    Grid::from_lines(crate::helpers::read_input_to_lines(input))
+fn parse(input: &str) -> Grid {
+    Grid::from_lines(crate::helpers::to_lines(input))
 }
 
 pub fn part_1(input: &str) -> i32 {
-    let mut grid: Grid = read(input);
+    let mut grid: Grid = parse(input);
     let (res, trail) = walk(&mut grid, Dir::U);
     let mut cells: Vec<(i32, i32)> = Vec::new();
     for (cell, dir) in trail {
@@ -23,8 +28,8 @@ pub fn part_1(input: &str) -> i32 {
 }
 
 pub fn part_2(input: &str) -> i32 {
-    let grid: Grid = read(input);
-    let mut grid: Grid = read(input);
+    let grid: Grid = parse(input);
+    let mut grid: Grid = parse(input);
     let mut obstacles = grid.clone();
 
     // walk the grid once to get the trail
@@ -103,23 +108,23 @@ mod tests {
     use super::*;
 
     #[test]
-    fn sample_1() {
-        assert_eq!(part_1("06_sample"), 41);
+    fn part_1_sample() {
+        assert_eq!(part_1(inputs::SAMPLE), 41);
     }
 
     #[test]
-    fn answer_1() {
-        assert_eq!(part_1("06"), 4778);
+    fn part_1_real() {
+        assert_eq!(part_1(inputs::REAL), 4778);
     }
 
     #[test]
-    fn sample_2() {
-        assert_eq!(part_2("06_sample"), 6);
+    fn part_2_sample() {
+        assert_eq!(part_2(inputs::SAMPLE), 6);
     }
 
     #[test]
-    fn answer_2() {
+    fn part_2_real() {
         // this takes a couple minutes on release build
-        //assert_eq!(part_2("06"), 1618);
+        //assert_eq!(part_2(inputs::REAL), 1618);
     }
 }

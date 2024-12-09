@@ -3,18 +3,13 @@
 
 mod helpers;
 mod grid;
-mod day_01;
-mod day_02;
-mod day_03;
-mod day_04;
-mod day_05;
-mod day_06;
-mod day_07;
-mod day_08;
+mod days;
+
+use days::d08 as day;
 
 fn main() {
-    //println!("{}", day_08::part_1("08_sample"));
-    //println!("{}", day_08::part_1("08"));
-    //println!("{}", day_08::part_2("08_sample"));
-    //println!("{}", day_08::part_2("08"));
+    println!("{}", day::part_1(day::inputs::SAMPLE));
+    println!("{}", day::part_1(day::inputs::REAL));
+    println!("{}", day::part_2(day::inputs::SAMPLE));
+    println!("{}", day::part_2(day::inputs::REAL));
 }

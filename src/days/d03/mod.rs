@@ -1,11 +1,17 @@
 use regex::Regex;
 
-fn read(input: &str) -> String {
-    crate::helpers::read_input_to_string(input)
+pub mod inputs {
+    pub const REAL: &str = include_str!("real");
+    pub const SAMPLE: &str = include_str!("sample");
+    pub const SAMPLE2: &str = include_str!("sample2");
+}
+
+fn parse(input: &str) -> String {
+    input.to_string()
 }
 
 pub fn part_1(input: &str) -> i32 {
-    let mem = read(input);
+    let mem = parse(input);
 
     let re = Regex::new(r"mul\((\d+),(\d+)\)").unwrap();
     let mut sum = 0;
@@ -20,7 +26,7 @@ pub fn part_1(input: &str) -> i32 {
 }
 
 pub fn part_2(input: &str) -> i32 {
-    let mem = read(input);
+    let mem = parse(input);
 
     let re = Regex::new(r"do\(\)|don't\(\)|mul\((\d+),(\d+)\)").unwrap();
 
@@ -50,22 +56,22 @@ mod tests {
     use super::*;
 
     #[test]
-    fn sample_1() {
-        assert_eq!(part_1("03_sample"), 161);
+    fn part_1_sample() {
+        assert_eq!(part_1(inputs::SAMPLE), 161);
     }
 
     #[test]
-    fn answer_1() {
-        assert_eq!(part_1("03"), 165225049);
+    fn part_1_real() {
+        assert_eq!(part_1(inputs::REAL), 165225049);
     }
 
     #[test]
-    fn sample_2() {
-        assert_eq!(part_2("03_sample2"), 48);
+    fn part_2_sample() {
+        assert_eq!(part_2(inputs::SAMPLE2), 48);
     }
 
     #[test]
-    fn answer_2() {
-        assert_eq!(part_2("03"), 108830766);
+    fn part_2_real() {
+        assert_eq!(part_2(inputs::REAL), 108830766);
     }
 }
