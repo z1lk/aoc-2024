@@ -95,11 +95,12 @@ impl Grid {
     pub fn neighbors(&self, x: i32, y: i32) -> Vec<(Option<char>, i32, i32)> {
         let offsets: [i32; 3] = [-1, 0, 1];
         let mut arr: Vec<(Option<char>, i32, i32)> = Vec::new();
-        for xo in offsets {
-            for yo in offsets {
-                if (xo == 0 && yo == 0) { continue; }
-                //if let Some(c) = self.get(x + xo, y + yo) {
-                    arr.push((self.get(x + xo, y + yo), xo, yo));
+        for dx in offsets {
+            for dy in offsets {
+                if (dx == 0 && dy == 0) { continue; }
+                //if let Some(c) = self.get(x + dx, y + dy) {
+                    // push it even if there is no char there. caller can decide how to handle
+                    arr.push((self.get(x + dx, y + dy), dx, dy));
                 //}
             }
         }
