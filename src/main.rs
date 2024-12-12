@@ -2,7 +2,7 @@ mod helpers;
 mod grid;
 mod days;
 
-use days::d10 as day;
+use days::d11 as day;
 
 fn main() {
     println!("{}", day::part_1(day::inputs::SAMPLE));
