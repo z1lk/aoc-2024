@@ -92,12 +92,14 @@ impl Grid {
         self.rows[y as usize][x as usize] = c;
     }
 
-    pub fn neighbors(&self, x: i32, y: i32) -> Vec<(Option<char>, i32, i32)> {
+    pub fn neighbors(&self, x: i32, y: i32, diagonals: bool) -> Vec<(Option<char>, i32, i32)> {
         let offsets: [i32; 3] = [-1, 0, 1];
         let mut arr: Vec<(Option<char>, i32, i32)> = Vec::new();
         for dx in offsets {
             for dy in offsets {
                 if (dx == 0 && dy == 0) { continue; }
+                // for diagonals, dx & dy will both be nonzero
+                if (!diagonals && dx != 0 && dy != 0) { continue } 
                 //if let Some(c) = self.get(x + dx, y + dy) {
                     // push it even if there is no char there. caller can decide how to handle
                     arr.push((self.get(x + dx, y + dy), dx, dy));
@@ -107,8 +109,10 @@ impl Grid {
         arr
     }
 
-    pub fn draw(&self) {
-        std::process::Command::new("clear").status().unwrap();
+    pub fn draw(&self, clear: bool) {
+        if (clear) {
+            std::process::Command::new("clear").status().unwrap();
+        }
         for row in &self.rows {
             for c in row {
                 print!("{}", c);

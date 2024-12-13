@@ -16,7 +16,7 @@ pub fn part_1(input: &str) -> i32 {
 
     for (c, x, y) in grid.iter() {
         if c != Some('X') { continue; }
-        for (c, dx, dy) in grid.neighbors(x, y).iter() {
+        for (c, dx, dy) in grid.neighbors(x, y, true).iter() {
             if (*c != Some('M')) { continue; }
             if (grid.get(x + dx * 2, y + dy * 2) != Some('A')) { continue; }
             if (grid.get(x + dx * 3, y + dy * 3) != Some('S')) { continue; }

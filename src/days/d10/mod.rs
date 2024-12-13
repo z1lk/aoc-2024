@@ -53,9 +53,7 @@ fn next_height(height: char) -> char {
 fn push_peaks(x: i32, y: i32, grid: &Grid, peaks: &mut Vec<(i32, i32)>) {
     let height = grid.get(x, y).unwrap();
     let next = next_height(height);
-    for (c, dx, dy) in grid.neighbors(x, y).iter() {
-        // neighbors() returns diagonals, but we only want UDLR, in which case one of dx/dy will be 0
-        if (*dx != 0 && *dy != 0) { continue } 
+    for (c, dx, dy) in grid.neighbors(x, y, false).iter() {
         if let Some(h) = c {
             if (*h != next) { continue }
             let x2 = x + dx;
@@ -92,8 +90,7 @@ pub fn part_2(input: &str) -> i32 {
 fn push_paths(x: i32, y: i32, grid: &Grid, mut path: Vec<(i32, i32)>, paths: &mut Vec<Vec<(i32, i32)>>) {
     let height = grid.get(x, y).unwrap();
     let next = next_height(height);
-    for (c, dx, dy) in grid.neighbors(x, y).iter() {
-        if (*dx != 0 && *dy != 0) { continue } 
+    for (c, dx, dy) in grid.neighbors(x, y, false).iter() {
         if let Some(h) = c {
             if (*h != next) { continue }
             let x2 = x + dx;
