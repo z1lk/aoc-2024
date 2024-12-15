@@ -74,6 +74,7 @@ impl Grid {
         }
     }
 
+    // NOTE: does not update_dims()
     // NOTE: started to allow setting negatives,
     // but vecs don't appear to have negative indices,
     // so we'll have to shift everything up in that case.
