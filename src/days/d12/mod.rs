@@ -9,7 +9,7 @@ pub mod inputs {
     pub const SAMPLE5: &str = include_str!("sample5");
 }
 
-fn parse(input: &str) -> (Grid, Vec<Vec<(i32,i32)>>) {
+fn parse(input: &str) -> (Grid<char>, Vec<Vec<(i32,i32)>>) {
     let grid = Grid::from_lines(crate::helpers::to_lines(input));
 
     // identify plots by character on grid. the solutions operate on them
@@ -33,7 +33,7 @@ fn parse(input: &str) -> (Grid, Vec<Vec<(i32,i32)>>) {
     (grid, plots)
 }
 
-fn build_plot(letter: char, x: i32, y: i32, grid: &Grid, plot: &mut Vec<(i32, i32)>) {
+fn build_plot(letter: char, x: i32, y: i32, grid: &Grid<char>, plot: &mut Vec<(i32, i32)>) {
     for (c, dx, dy) in grid.neighbors(x, y, false).iter() {
         if (Some(letter) == *c) {
             let x2 = x + dx;

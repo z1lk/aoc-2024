@@ -13,12 +13,12 @@ pub mod inputs {
     pub const P2_SAMPLE3: &str = include_str!("p2_sample3");
 }
 
-fn parse(input: &str) -> Grid {
+fn parse(input: &str) -> Grid<char> {
     Grid::from_lines(crate::helpers::to_lines(input))
 }
 
 pub fn part_1(input: &str) -> i32 {
-    let grid: Grid = parse(input);
+    let grid: Grid<char> = parse(input);
     let mut trails = HashMap::new();
     for (c, x, y) in grid.iter() {
         if c != Some('0') { continue; }
@@ -50,7 +50,7 @@ fn next_height(height: char) -> char {
 
 // recursive fn that looks at a grid cells neighbors, steps up until it reaches height 9,
 // and pushes that peak onto the peaks vec, if it hasn't been found yet.
-fn push_peaks(x: i32, y: i32, grid: &Grid, peaks: &mut Vec<(i32, i32)>) {
+fn push_peaks(x: i32, y: i32, grid: &Grid<char>, peaks: &mut Vec<(i32, i32)>) {
     let height = grid.get(x, y).unwrap();
     let next = next_height(height);
     for (c, dx, dy) in grid.neighbors(x, y, false).iter() {
@@ -71,7 +71,7 @@ fn push_peaks(x: i32, y: i32, grid: &Grid, peaks: &mut Vec<(i32, i32)>) {
 
 // same as part 1, except that instead of tracking unique peaks, we track unique paths to peaks
 pub fn part_2(input: &str) -> i32 {
-    let grid: Grid = parse(input);
+    let grid: Grid<char> = parse(input);
     let mut trails = HashMap::new();
     for (c, x, y) in grid.iter() {
         if c != Some('0') { continue; }
@@ -87,7 +87,7 @@ pub fn part_2(input: &str) -> i32 {
     score
 }
 
-fn push_paths(x: i32, y: i32, grid: &Grid, mut path: Vec<(i32, i32)>, paths: &mut Vec<Vec<(i32, i32)>>) {
+fn push_paths(x: i32, y: i32, grid: &Grid<char>, mut path: Vec<(i32, i32)>, paths: &mut Vec<Vec<(i32, i32)>>) {
     let height = grid.get(x, y).unwrap();
     let next = next_height(height);
     for (c, dx, dy) in grid.neighbors(x, y, false).iter() {

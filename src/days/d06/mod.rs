@@ -12,12 +12,12 @@ pub enum Dir { U, D, L, R }
 
 pub enum Result { Exit, Loop }
 
-fn parse(input: &str) -> Grid {
+fn parse(input: &str) -> Grid<char> {
     Grid::from_lines(crate::helpers::to_lines(input))
 }
 
 pub fn part_1(input: &str) -> i32 {
-    let mut grid: Grid = parse(input);
+    let mut grid: Grid<char> = parse(input);
     let (res, trail) = walk(&mut grid, Dir::U);
     let mut cells: Vec<(i32, i32)> = Vec::new();
     for (cell, dir) in trail {
@@ -28,8 +28,8 @@ pub fn part_1(input: &str) -> i32 {
 }
 
 pub fn part_2(input: &str) -> i32 {
-    let grid: Grid = parse(input);
-    let mut grid: Grid = parse(input);
+    let grid: Grid<char> = parse(input);
+    let mut grid: Grid<char> = parse(input);
     let mut obstacles = grid.clone();
 
     // walk the grid once to get the trail
@@ -56,7 +56,7 @@ pub fn part_2(input: &str) -> i32 {
 }
 
 // wrapper around recursive _walk fn that initializes and returns the trail
-pub fn walk(grid: &mut Grid, dir: Dir) -> (Result, Vec<((i32, i32), Dir)>) {
+pub fn walk(grid: &mut Grid<char>, dir: Dir) -> (Result, Vec<((i32, i32), Dir)>) {
     let mut trail: Vec<((i32, i32), Dir)> = Vec::new();
     let res = _walk(grid, dir, &mut trail);
     (res, trail)
@@ -82,7 +82,7 @@ fn next_dir(dir: Dir) -> Dir {
 }
 
 // recursive fn to walk the grid
-pub fn _walk(grid: &mut Grid, dir: Dir, trail: &mut Vec<((i32, i32), Dir)>) -> Result {
+pub fn _walk(grid: &mut Grid<char>, dir: Dir, trail: &mut Vec<((i32, i32), Dir)>) -> Result {
     //thread::sleep(time::Duration::from_millis(100));
     //grid.draw();
     let pos = grid.find('^').unwrap();

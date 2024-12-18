@@ -5,12 +5,12 @@ pub mod inputs {
     pub const SAMPLE: &str = include_str!("sample");
 }
 
-fn parse(input: &str) -> Grid {
+fn parse(input: &str) -> Grid<char> {
     Grid::from_lines(crate::helpers::to_lines(input))
 }
 
 pub fn part_1(input: &str) -> i32 {
-    let grid: Grid = parse(input);
+    let grid: Grid<char> = parse(input);
 
     let mut xmas = 0;
 
@@ -28,7 +28,7 @@ pub fn part_1(input: &str) -> i32 {
 }
 
 pub fn part_2(input: &str) -> i32 {
-    let grid: Grid = parse(input);
+    let grid: Grid<char> = parse(input);
 
     let mut x_mas = 0;
 

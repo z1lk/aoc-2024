@@ -6,7 +6,7 @@ pub mod inputs {
     pub const SAMPLE2: &str = include_str!("sample2");
 }
 
-fn parse(input: &str) -> (Grid, Vec<Dir>) {
+fn parse(input: &str) -> (Grid<char>, Vec<Dir>) {
     let lines = crate::helpers::to_lines(input);
     let mut grid_lines: Vec<String> = Vec::new();
     let mut moves: Vec<Dir> = Vec::new();
@@ -67,7 +67,7 @@ pub fn part_1(input: &str) -> i32 {
     gps_sum
 }
 
-pub fn move_dir(mut grid: Grid, pos: (i32, i32), dir: &Dir) -> Grid {
+pub fn move_dir(mut grid: Grid<char>, pos: (i32, i32), dir: &Dir) -> Grid<char> {
     let p = next_pos(pos, dir);
     let mut c = grid.get(p.0, p.1).unwrap();
     match c {
@@ -136,7 +136,7 @@ pub fn part_2(input: &str) -> i32 {
 }
 
 // recursive fn to check if object can move in direction
-pub fn can_move_2(grid: &Grid, pos: (i32, i32), dir: &Dir) -> bool {
+pub fn can_move_2(grid: &Grid<char>, pos: (i32, i32), dir: &Dir) -> bool {
     let p = next_pos(pos, dir);
     let c = grid.get(p.0, p.1).unwrap();
     match c {
@@ -163,7 +163,7 @@ pub fn can_move_2(grid: &Grid, pos: (i32, i32), dir: &Dir) -> bool {
         _ => panic!("unexpected char {}", c),
     }
 }
-pub fn move_dir_2(mut grid: Grid, pos: (i32, i32), dir: &Dir) -> Grid {
+pub fn move_dir_2(mut grid: Grid<char>, pos: (i32, i32), dir: &Dir) -> Grid<char> {
     // first check self and anything in the way can move.
     // it's resursive, so we only need to check once, on the initial move of the robot.
     // for the boxes, we will have already checked.

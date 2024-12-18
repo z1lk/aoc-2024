@@ -5,7 +5,7 @@ pub mod inputs {
     pub const SAMPLE: &str = include_str!("sample");
 }
 
-fn parse(input: &str) -> Grid {
+fn parse(input: &str) -> Grid<char> {
     Grid::from_lines(crate::helpers::to_lines(input))
 }
 
