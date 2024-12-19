@@ -143,27 +143,85 @@ pub fn part_1(input: &str) -> String {
     computer.output()
 }
 
+// program opcodes and operands:
+
+// 2,4
+// 1,1
+// 7,5
+// 1,5
+// 4,3
+// 0,3
+// 5,5
+// 3,0
+
+// converted to readable instructions:
+
+// bst 4
+// bxl 1
+// cdv 5
+// bxl 5
+// bxc 3
+// adv 3
+// out 5
+// jnz 0
+
+// converted to more high-level logic:
+
+// B = A % 8                            take last 3 bits of A
+// B = B XOR 1                          shift B around
+// C = A / ( 2 ** B )                   C = some fraction of A, as small as (2**7)th = 128th / some variable number of bits of A
+// B = B XOR 5                          shift B around
+// B = B XOR C                          shift B around
+// A = A / 8                            remove last 3 bits of A
+// output B % 8                         output last 3 bits of B
+// if A == 0, halt, else restart        continue until A == 0
+
+// So what this program is doing is:
+// - take the last 3 bits of A
+// - hash them using a larger portion of A into a 3-bit value
+// - output that 3-bit value
+// - repeat until we've consumed all of A
+//
+// Because bits are consumed from the end of A, the last bits to be consumed will be the highest
+// ones. So to find value of register A that recreates the program as output, we have to start
+// constructing the number from the highest 3 bits first. First we find a value that recreates the
+// *last* output value. Then we find a value for the second-highest 3-bits that recreates the
+// *second-to-last* output value. And so on, 16 times to create the 16 3-bit values of our answer.
+// There are values that seem to work initially but break down in the middle, so the process must
+// be recursive to explore all potential answers. This is the `find_value` function. Because we are
+// starting from the highest bits and iterating on potential values from 0 to 7, in a depth-first
+// manner, the first matching value we find is necessarily the smallest of all potential values.
+
 pub fn part_2(input: &str) -> i64 {
-    //let computer_output = part_1(input);
-
     let mut computer = parse(input);
-    //let mut i = 50_000_000_000_000;
-    //let mut i = 0;
-    let mut i = 35184372088832;
+    let cursor_max = computer.program.len();
+    find_value(&computer, 1, cursor_max, 0).unwrap()
+}
 
-    loop {
-        thread::sleep(time::Duration::from_millis(100));
-        println!("{:?}", i);
-        let mut computer2 = computer.clone();
-        computer2.reg_a = i;
-        computer2.run();
-        let output = computer2.output();
-        println!("{:?}", output);
-        if computer2.out == computer.program {
-            return i;
+// based on this reddit comment which helped me figure out how to solve this
+// https://www.reddit.com/r/adventofcode/comments/1hg38ah/comment/m2gge90/
+fn find_value(computer: &Computer, curs: usize, cursor_max: usize, reg: i64) -> Option<i64> {
+    // the potential 3-bit value
+    for oct in 0..=7 {
+        // shift our existing value up 3 bits (*8) and add the potential
+        let reg2 = reg * 8 + oct;
+        let mut c = computer.clone();
+        // set register A and run the program
+        c.reg_a = reg2;
+        c.run();
+        if c.out == computer.program.get((cursor_max-curs)..).unwrap() {
+            // if the output matches the last n=curs digits of the program
+            if curs == cursor_max {
+                // we've found the 16 3-bit values that recreate the program
+                return Some(reg2)
+            } else {
+                // recurse with an incremented cursor and updated register value
+                let v = find_value(computer, curs + 1, cursor_max, reg2);
+                if v != None { return v }
+            }
         }
-        i += 1;
     }
+    None
 }
 
 #[cfg(test)]
@@ -182,11 +240,11 @@ mod tests {
 
     #[test]
     fn part_2_sample() {
-        //assert_eq!(part_2(inputs::SAMPLE), 0);
+        assert_eq!(part_2(inputs::SAMPLE2), 117440);
     }
 
     #[test]
     fn part_2_real() {
-        // assert_eq!(part_2(inputs::REAL), 0);
+        assert_eq!(part_2(inputs::REAL), 164541017976509);
     }
 }
