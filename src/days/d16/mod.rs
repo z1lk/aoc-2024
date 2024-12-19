@@ -11,7 +11,6 @@ fn parse(input: &str) -> Grid<char> {
     Grid::from_lines(crate::helpers::to_lines(input))
 }
 
-
 #[derive(Clone,Debug,PartialEq)]
 pub enum Dir { U, D, L, R, Z } // Z == unknown
 
