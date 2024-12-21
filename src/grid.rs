@@ -7,6 +7,11 @@ pub struct Grid<T> {
 }
 
 impl Grid<char> {
+    pub fn from_str(s: &str) -> Self {
+        let lines = s.lines().map(String::from).collect();
+        Self::from_lines(lines)
+    }
+
     pub fn from_lines(lines: Vec<String>) -> Self {
         let rows: Vec<Vec<char>> = lines.iter().map(|line| line.chars().collect()).collect();
         Self::from_rows(rows)
