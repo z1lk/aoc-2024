@@ -9,7 +9,7 @@ pub mod inputs {
     pub const SAMPLE3: &str = include_str!("sample3");
 }
 
-#[derive(Debug)]
+#[derive(Clone,Debug)]
 struct Gate {
     name: String,
     value: i32,
@@ -19,7 +19,7 @@ struct Gate {
     operator: Op
 }
 
-#[derive(Debug,PartialEq)]
+#[derive(Clone,Debug,PartialEq)]
 enum Op { And, Or, Xor, None }
 
 type Gates = HashMap<String, Gate>;
@@ -85,6 +85,46 @@ pub fn part_1(input: &str) -> i64 {
     let mut gates = parse(input);
     run(&mut gates);
     get_z(&gates)
+}
+
+// Identified swapped wires by manually inspecting the input's wiring.
+// dkr,ggk,hhh,htp,rhv,z05,z15,z20
+// The function body does the swapping and asserts that it works.
+pub fn part_2(input: &str) {
+    let mut gates = parse(input);
+    // y05 AND x05 -> z05    carry - WRONG - should be -> dkr
+    // gcs XOR hdc -> dkr    sum out - WRONG - should be -> z05
+    // bhw XOR sth -> htp    sum out - WRONG - should be -> z15
+    // sth AND bhw -> z15    sum overflow - WRONG - should be -> htp
+    // mvv XOR fvm -> hhh    sum out - WRONG - should be -> z20
+    // qfj OR mqg -> z20     carry out - WRONG - should be -> hhh
+    // y36 XOR x36 -> rhv      sum - WRONG - should be -> ggk
+    // x36 AND y36 -> ggk      carry - WRONG - should be -> rhv
+    let swaps = [ ("z05", "dkr"), ("htp", "z15"), ("hhh", "z20"), ("rhv", "ggk") ];
+
+    // the expected sum from the initial x/y values
+    let sum = get_x(&gates) + get_y(&gates);
+
+    // run mis-wired adder
+    run(&mut gates);
+    assert_ne!(get_z(&gates), sum);
+
+    // swap the wires
+    for (m,n) in swaps {
+        let mut a = gates.get(m).unwrap().clone();
+        let mut b = gates.get(n).unwrap().clone();
+
+        a.name = n.to_string();
+        gates.insert(n.to_string(), a);
+
+        b.name = m.to_string();
+        gates.insert(m.to_string(), b);
+    }
+
+    // run properly wired adder
+    reset(&mut gates);
+    run(&mut gates);
+    assert_eq!(get_z(&gates), sum);
 }
 
 fn run(mut gates: &mut Gates) {
@@ -206,8 +246,10 @@ fn reset(mut gates: &mut Gates) {
     }
 }
 
+/*
 pub fn get_bad_bits(n: i64, m: i64) -> Vec<i32> {
     let mut bits: Vec<i32> = Vec::new();
+    //for i in 0..6 {
     for i in 0..46 {
         if get_bit(n, i) != get_bit(m, i) {
             bits.push(i);
@@ -215,8 +257,32 @@ pub fn get_bad_bits(n: i64, m: i64) -> Vec<i32> {
     }
     bits
 }
+*/
 
-pub fn part_2(input: &str) -> i32 {
+/*
+fn get_all_input_gates(gates: &Gates, name: String) -> Vec<String> {
+    let mut names: Vec<String> = Vec::new();
+    let gate = gates.get(&name).unwrap();
+    match gate.operator {
+        Op::None => return names,
+        _ => {
+            let input1 = gate.input1.clone().unwrap();
+            let input2 = gate.input2.clone().unwrap();
+            //names.push(input1.clone());
+            //names.push(input2.clone());
+            names.push(name);
+            return [
+                names,
+                get_all_input_gates(gates, input1),
+                get_all_input_gates(gates, input2)
+            ].concat();
+        }
+    }
+}
+*/
+
+/*
+pub fn part_2_id_bad_bits(input: &str) -> i32 {
     let mut gates = parse(input);
 
     // testing that setting/getting works
@@ -233,21 +299,19 @@ pub fn part_2(input: &str) -> i32 {
     
     // 8796093022208
 
-    //for x in 0..45 {
-    //    for y in 0..45 {
-    for x in [0, 15, 793, 1840, 51196] {
-        for y in [1, 70, 943, 3248, 31849] {
+    for _ in 0..20 {
+        for _ in 0..20 {
             set_x(&mut gates, x);
             set_y(&mut gates, y);
             run(&mut gates);
             let z = get_z(&gates);
             reset(&mut gates);
 
-            println!("x={:?} y={:?} z={:?}", x, y, z);
+            //println!("x={:?} y={:?} z={:?}", x, y, z);
             let expected = x + y;
             //let expected = x & y;
             if z != expected {
-                println!("bad!");
+                //println!("bad!");
                 for i in get_bad_bits(z, expected) {
                     if !bad_bits.contains(&i) {
                         bad_bits.push(i);
@@ -258,14 +322,33 @@ pub fn part_2(input: &str) -> i32 {
         }
     }
 
+
     println!("---");
     println!("{:?}", bad_bits);
 
-    // TODO: identify wires involved in the setting of those bits
+    let mut z_names = vec![];
+    for b in &bad_bits {
+        let z = format!("z{:02}", b);
+        z_names.push(z);
+    }
+    //println!("{:?}", z_names);
+
+    let mut potential_gates = vec![];
+    for name in z_names {
+        potential_gates = [
+            potential_gates,
+            get_all_input_gates(&gates, name)
+        ].concat();
+    }
+    potential_gates.sort();
+    potential_gates.dedup();
+
+    println!("{:?}", potential_gates);
 
     bad
-    //0
+    0
 }
+*/
 
 #[cfg(test)]
 mod tests {
@@ -286,13 +369,15 @@ mod tests {
         assert_eq!(part_1(inputs::REAL), 53755311654662);
     }
 
-    #[test]
+    /*#[test]
     fn part_2_sample() {
         assert_eq!(part_2(inputs::SAMPLE), 0);
-    }
+    }*/
 
     #[test]
     fn part_2_real() {
-        assert_eq!(part_2(inputs::REAL), 0);
+        // assertions in part_2 verify that swapped inputs make the adder function properly
+        part_2(inputs::REAL);
+        //assert_eq!(part_2(inputs::REAL), 0);
     }
 }
